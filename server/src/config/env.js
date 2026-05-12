@@ -1,15 +1,20 @@
 const dotenv = require("dotenv");
 const { z } = require("zod");
 
-dotenv.config();
+dotenv.config({ override: true });
+
+function emptyStringToUndefined(value) {
+  return value === "" ? undefined : value;
+}
 
 const envSchema = z.object({
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
   PORT: z.coerce.number().int().min(1).max(65535).default(4000),
-  DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
-  DB_SSL: z.enum(["true", "false"]).default("false"),
+  DATABASE_URL: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
+  SUPABASE_DB_URL: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
+  DB_SSL: z.enum(["true", "false"]).default("true"),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -22,7 +27,16 @@ if (!parsed.success) {
   throw new Error(`Invalid environment configuration: ${issueText}`);
 }
 
-const env = parsed.data;
+const env = {
+  ...parsed.data,
+  DATABASE_URL: parsed.data.SUPABASE_DB_URL || parsed.data.DATABASE_URL,
+};
+
+if (!env.DATABASE_URL) {
+  throw new Error(
+    "Invalid environment configuration: provide DATABASE_URL or SUPABASE_DB_URL"
+  );
+}
 
 module.exports = {
   env,

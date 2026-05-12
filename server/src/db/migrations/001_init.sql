@@ -1,4 +1,10 @@
-create extension if not exists pgcrypto;
+do $$
+begin
+  create extension if not exists pgcrypto;
+exception
+  when insufficient_privilege then
+    null;
+end $$;
 
 create table if not exists users (
   id uuid primary key default gen_random_uuid(),
