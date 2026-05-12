@@ -5,6 +5,7 @@ const {
   errorHandler,
   notFoundHandler,
 } = require("./middleware/error-handler");
+const authRoutes = require("./routes/auth.routes");
 const healthRoutes = require("./routes/health.routes");
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json({ limit: "1mb" }));
 app.use(requestLogger);
 
 app.use("/health", healthRoutes);
+app.use("/auth", authRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

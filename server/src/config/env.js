@@ -14,6 +14,8 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().min(1).max(65535).default(4000),
   DATABASE_URL: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
   SUPABASE_DB_URL: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
+  CLERK_ISSUER_URL: z.preprocess(emptyStringToUndefined, z.string().url().optional()),
+  CLERK_JWKS_URL: z.preprocess(emptyStringToUndefined, z.string().url().optional()),
   DB_SSL: z.enum(["true", "false"]).default("true"),
 });
 
@@ -36,6 +38,12 @@ if (!env.DATABASE_URL) {
   throw new Error(
     "Invalid environment configuration: provide DATABASE_URL or SUPABASE_DB_URL"
   );
+}
+
+if (!env.CLERK_JWKS_URL) {
+  env.CLERK_JWKS_URL = env.CLERK_ISSUER_URL
+    ? `${env.CLERK_ISSUER_URL.replace(/\/$/, "")}/.well-known/jwks.json`
+    : undefined;
 }
 
 module.exports = {

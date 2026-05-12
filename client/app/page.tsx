@@ -1,65 +1,85 @@
-import Image from "next/image";
+import Link from "next/link";
+
+const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(34,197,94,0.16),_transparent_35%),linear-gradient(180deg,_#020617_0%,_#0f172a_100%)] px-6 py-8 text-slate-50">
+      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col rounded-[2rem] border border-white/10 bg-white/5 px-6 py-8 shadow-2xl shadow-emerald-950/20 backdrop-blur md:px-10">
+        <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
+          <div>
+            <p className="text-sm uppercase tracking-[0.3em] text-emerald-300/80">
+              WhatsApp Automation SaaS
+            </p>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+              Clerk authentication is wired for the app shell.
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/sign-in"
+              className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              Sign in
+            </Link>
+            <Link
+              href="/sign-up"
+              className="rounded-full bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+              Get started
+            </Link>
+          </div>
+        </header>
+
+        <section className="grid flex-1 gap-8 py-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+          <div className="max-w-2xl">
+            <p className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-sm text-emerald-200">
+              Dashboard auth, session sync, and route protection
+            </p>
+            <h2 className="mt-6 text-4xl font-semibold tracking-tight md:text-6xl">
+              Sign in once, then manage your WhatsApp automations safely.
+            </h2>
+            <p className="mt-6 text-lg leading-8 text-slate-300">
+              This frontend now supports Clerk sign-in and sign-up, protects the
+              dashboard route, and is ready to send authenticated Bearer tokens
+              to the backend.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href={clerkEnabled ? "/sign-in" : "/dashboard"}
+                className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200"
+              >
+                Sign in to continue
+              </Link>
+            </div>
+          </div>
+
+          <div className="rounded-[1.5rem] border border-white/10 bg-slate-900/70 p-6 shadow-xl shadow-black/20">
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+                  Auth flow
+                </p>
+                <p className="mt-2 text-sm text-slate-200">
+                  Clerk provider at the root, protected /dashboard routes, and
+                  a sync endpoint to persist users into Supabase.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+                  Next step
+                </p>
+                <p className="mt-2 text-sm text-slate-200">
+                  Sign in, then the app will surface your dashboard and use the
+                  session token for API calls.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }

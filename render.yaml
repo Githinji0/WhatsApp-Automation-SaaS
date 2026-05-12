@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: whatsapp-automation-saas
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: DB_SSL
+        value: "true"
+      - key: SUPABASE_DB_URL
+        sync: false
+      - key: CLERK_ISSUER_URL
+        sync: false
+      - key: CLERK_JWKS_URL
+        sync: false
+      - key: CLERK_API_KEY
+        sync: false
+      - key: OPENROUTER_KEY
+        sync: false
