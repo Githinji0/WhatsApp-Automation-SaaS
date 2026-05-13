@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { AuthMeCard } from "./auth-me-card";
+
 export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-slate-950 px-6 py-10 text-slate-50">
@@ -38,6 +40,10 @@ export default function DashboardPage() {
               automatically adds the Bearer token for API requests.
             </p>
           </div>
+                </section>
+
+        <section className="mt-6">
+          <AuthMeCard />
         </section>
       </div>
     </main>

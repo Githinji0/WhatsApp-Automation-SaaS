@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
-
 export default function Home() {
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(34,197,94,0.16),_transparent_35%),linear-gradient(180deg,_#020617_0%,_#0f172a_100%)] px-6 py-8 text-slate-50">
@@ -27,7 +25,7 @@ export default function Home() {
               href="/sign-up"
               className="rounded-full bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300"
             >
-              Get started
+              Create account
             </Link>
           </div>
         </header>
@@ -48,10 +46,16 @@ export default function Home() {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                href={clerkEnabled ? "/sign-in" : "/dashboard"}
+                href="/sign-up"
                 className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200"
               >
-                Sign in to continue
+                Create your account
+              </Link>
+              <Link
+                href="/sign-in"
+                className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              >
+                I already have an account
               </Link>
             </div>
           </div>
