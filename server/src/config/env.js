@@ -16,6 +16,15 @@ const envSchema = z.object({
   SUPABASE_DB_URL: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
   CLERK_ISSUER_URL: z.preprocess(emptyStringToUndefined, z.string().url().optional()),
   CLERK_JWKS_URL: z.preprocess(emptyStringToUndefined, z.string().url().optional()),
+  WHATSAPP_PROVIDER: z.preprocess(emptyStringToUndefined, z.enum(["meta", "webjs", "mock"]).optional()),
+  WHATSAPP_API_VERSION: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
+  WHATSAPP_ACCESS_TOKEN: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
+  WHATSAPP_PHONE_NUMBER_ID: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
+  WHATSAPP_WEBJS_SESSION_NAME: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
+  OPENROUTER_API_KEY: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
+  OPENROUTER_MODEL: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
+  OPENROUTER_SITE_URL: z.preprocess(emptyStringToUndefined, z.string().url().optional()),
+  OPENROUTER_APP_NAME: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
   DB_SSL: z.enum(["true", "false"]).default("true"),
 });
 

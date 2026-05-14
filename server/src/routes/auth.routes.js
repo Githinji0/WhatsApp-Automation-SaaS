@@ -23,4 +23,13 @@ router.post("/sync-user", requireAuth, async (req, res, next) => {
   }
 });
 
+router.get("/session", requireAuth, async (req, res) => {
+  const user = await upsertUserFromClerk(req.auth);
+
+  res.status(200).json({
+    user,
+    auth: req.auth,
+  });
+});
+
 module.exports = router;

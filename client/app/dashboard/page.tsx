@@ -43,6 +43,12 @@ export default function DashboardPage() {
               The next step is building the first WhatsApp workflow: connect an
               account, create a campaign, or send a test message.
             </p>
+            <Link
+              href="/dashboard/workflows/new"
+              className="mt-5 inline-flex rounded-full bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300"
+            >
+              Start a WhatsApp workflow
+            </Link>
           </div>
         </section>
 
