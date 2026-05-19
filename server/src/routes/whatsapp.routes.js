@@ -1,11 +1,18 @@
 const express = require("express");
 
 const { requireAuth } = require("../middleware/auth");
-const { getWhatsappWebjsStatus, sendMessage } = require("../services/whatsapp-webjs-engine");
+const {
+  getWhatsappWebjsStatus,
+  sendMessage,
+  reconnectWhatsappWebjs,
+  ensureWhatsappWebjsSessionStarted,
+} = require("../services/whatsapp-webjs-engine");
 
 const router = express.Router();
 
 router.get("/status", requireAuth, (req, res) => {
+  ensureWhatsappWebjsSessionStarted();
+
   res.status(200).json({
     whatsapp: getWhatsappWebjsStatus(),
   });
@@ -33,6 +40,17 @@ router.post("/send", requireAuth, async (req, res, next) => {
         providerMessageId: result?.id?._serialized || result?.id || null,
       },
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/reconnect", requireAuth, async (req, res, next) => {
+  try {
+    // Trigger reconnect with defaults (will run retries/backoff)
+    await reconnectWhatsappWebjs();
+
+    res.status(202).json({ message: "Reconnect started", whatsapp: getWhatsappWebjsStatus() });
   } catch (error) {
     next(error);
   }

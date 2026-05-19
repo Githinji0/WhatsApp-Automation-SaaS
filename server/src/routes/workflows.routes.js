@@ -1,4 +1,5 @@
 const express = require("express");
+const { clerkClient } = require("@clerk/express");
 
 const { requireAuth } = require("../middleware/auth");
 const { upsertUserFromClerk } = require("../db/users.repo");
@@ -44,7 +45,15 @@ function parseWorkflowPayload(body) {
 }
 
 async function loadCurrentUser(req) {
-  return upsertUserFromClerk(req.auth);
+  const clerkUserId = req.auth?.clerkId ?? req.auth?.userId ?? req.auth?.sub;
+
+  if (!clerkUserId) {
+    throw new Error("Missing Clerk user ID");
+  }
+
+  const fullUser = await clerkClient.users.getUser(clerkUserId);
+
+  return upsertUserFromClerk(fullUser);
 }
 
 async function dispatchWorkflow({ workflowId, userId, recipient, message, provider }) {

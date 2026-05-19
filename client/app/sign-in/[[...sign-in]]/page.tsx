@@ -1,10 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { SignIn } from "@clerk/nextjs";
 
 export default function SignInPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(34,197,94,0.12),_transparent_38%),linear-gradient(180deg,_#020617_0%,_#0f172a_100%)] px-6 py-12 text-slate-50">
-      <div className="w-full max-w-[420px] rounded-[2rem] border border-white/10 bg-white/5 p-4 shadow-2xl shadow-black/20 backdrop-blur">
+    <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,rgba(34,197,94,0.12),transparent_38%),linear-gradient(180deg,#020617_0%,#0f172a_100%)] px-6 py-12 text-slate-50">
+      <div className="w-full max-w-105 rounded-4xl border border-white/10 bg-white/5 p-4 shadow-2xl shadow-black/20 backdrop-blur">
         <SignIn
           routing="path"
           path="/sign-in"

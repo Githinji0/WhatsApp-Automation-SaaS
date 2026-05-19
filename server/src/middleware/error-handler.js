@@ -9,6 +9,7 @@ function notFoundHandler(req, res, next) {
 function errorHandler(err, req, res, next) {
   const statusCode = Number.isInteger(err.statusCode) ? err.statusCode : 500;
   const message = statusCode === 500 ? "Internal server error" : err.message;
+  const code = err.code || (statusCode === 500 ? "INTERNAL_ERROR" : "REQUEST_ERROR");
 
   logger.error("http.error", {
     method: req.method,
@@ -26,7 +27,7 @@ function errorHandler(err, req, res, next) {
   res.status(statusCode).json({
     error: {
       message,
-      code: statusCode === 500 ? "INTERNAL_ERROR" : "REQUEST_ERROR",
+      code,
     },
   });
 }

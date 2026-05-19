@@ -26,6 +26,7 @@ const envSchema = z.object({
   OPENROUTER_SITE_URL: z.preprocess(emptyStringToUndefined, z.string().url().optional()),
   OPENROUTER_APP_NAME: z.preprocess(emptyStringToUndefined, z.string().min(1).optional()),
   DB_SSL: z.enum(["true", "false"]).default("true"),
+  CORS_ALLOWED_ORIGINS: z.preprocess(emptyStringToUndefined, z.string().optional()),
 });
 
 const parsed = envSchema.safeParse(process.env);

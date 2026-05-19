@@ -1,6 +1,36 @@
 const { pool } = require("./client");
 
-async function upsertUserFromClerk({ clerkId, email, name }) {
+function getClerkEmail(clerkUser) {
+  return (
+    clerkUser.emailAddresses?.[0]?.emailAddress ??
+    clerkUser.email ??
+    clerkUser.primary_email_address ??
+    clerkUser.primaryEmailAddress ??
+    null
+  );
+}
+
+function getClerkName(clerkUser) {
+  const fallbackName = [clerkUser.firstName, clerkUser.lastName]
+    .filter(Boolean)
+    .join(" ");
+
+  return clerkUser.name ?? clerkUser.full_name ?? clerkUser.fullName ?? fallbackName ?? null;
+}
+
+async function upsertUserFromClerk(clerkUser) {
+  const clerkId = clerkUser.clerkId ?? clerkUser.id ?? clerkUser.sub;
+  const email = getClerkEmail(clerkUser);
+  const name = getClerkName(clerkUser);
+
+  if (!clerkId) {
+    throw new Error("No Clerk user ID found");
+  }
+
+  if (!email) {
+    throw new Error(`No email found for Clerk user ${clerkId}`);
+  }
+
   const result = await pool.query(
     `
       insert into users (clerk_id, email, name)

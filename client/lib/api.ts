@@ -11,23 +11,31 @@ export function useAuthenticatedFetch() {
 
   return useCallback(
     async function authenticatedFetch(input: string, init: RequestInit = {}) {
-      const token = await getToken();
+      async function performFetch(skipCache = false) {
+        const token = await getToken(skipCache ? { skipCache: true } : undefined);
 
-      const headers = new Headers(init.headers);
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
+        const headers = new Headers(init.headers);
+        if (token) {
+          headers.set("Authorization", `Bearer ${token}`);
+        }
+
+        if (!headers.has("Content-Type") && init.body) {
+          headers.set("Content-Type", "application/json");
+        }
+
+        return fetch(input.startsWith("http") ? input : `${DEFAULT_BASE_URL}${input}`, {
+          ...init,
+          headers,
+        });
       }
 
-      if (!headers.has("Content-Type") && init.body) {
-        headers.set("Content-Type", "application/json");
+      const response = await performFetch(false);
+
+      if (response.status !== 401) {
+        return response;
       }
 
-      const response = await fetch(input.startsWith("http") ? input : `${DEFAULT_BASE_URL}${input}`, {
-        ...init,
-        headers,
-      });
-
-      return response;
+      return performFetch(true);
     },
     [getToken]
   );
