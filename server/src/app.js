@@ -15,6 +15,7 @@ const whatsappRoutes = require("./routes/whatsapp.routes");
 // debug routes are only enabled in development
 let debugRoutes;
 
+const { logger } = require("./config/logger");
 const app = express();
 const defaultAllowedOrigins = ["http://localhost:3000", "http://127.0.0.1:3000"];
 const allowedOrigins = env.CORS_ALLOWED_ORIGINS
@@ -69,6 +70,7 @@ app.use("/workflows", workflowsRoutes);
 if (env.NODE_ENV === "development") {
   debugRoutes = require("./routes/debug.routes");
   app.use("/debug", debugRoutes);
+  logger.info("debug.routes.enabled", { path: "/debug" });
 }
 
 app.use(notFoundHandler);

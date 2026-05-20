@@ -1,10 +1,24 @@
 const express = require("express");
 
 const { env } = require("../config/env");
-const { sendMessage } = require("../services/whatsapp-webjs-engine");
-const { reconnectWhatsappWebjs, getWhatsappWebjsStatus } = require("../services/whatsapp-webjs-engine");
+const { sendMessage, reconnectWhatsappWebjs, getWhatsappWebjsStatus } = require("../services/whatsapp-webjs-engine");
 
 const router = express.Router();
+
+router.get("/ping", (req, res) => {
+  const origin = req.headers.origin || null;
+  const hasAuth = !!req.headers.authorization;
+
+  res.status(200).json({
+    ok: true,
+    origin,
+    hasAuth,
+    headers: {
+      // echo only safe, non-sensitive header meta
+      "user-agent": req.headers["user-agent"] || null,
+    },
+  });
+});
 
 // Development-only route to inspect Clerk env values
 router.get("/clerk", (req, res) => {
@@ -41,8 +55,6 @@ router.post("/whatsapp/send-test", async (req, res, next) => {
   }
 });
 
-module.exports = router;
-
 // Development-only: trigger reconnect without auth
 router.post("/whatsapp/reconnect-dev", async (req, res, next) => {
   if (env.NODE_ENV !== "development") {
@@ -56,3 +68,5 @@ router.post("/whatsapp/reconnect-dev", async (req, res, next) => {
     next(err);
   }
 });
+
+module.exports = router;
